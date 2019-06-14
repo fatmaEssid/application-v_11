@@ -1,0 +1,321 @@
+ <div [@routerTransition]>
+    <app-page-header [heading]="'Gestion des Factures'" [icon]="'fa fa-wrench'" ></app-page-header> 
+ 
+  <h1 class="display-5" *ngIf="service.formData.fact_id == null">Ajouter Nouveau Facture </h1> 
+  <h1 class="display-5" *ngIf="service.formData.fact_id != null">Modifier les factures de client  &nbsp; *{{service.formData.client}}* </h1><hr>
+ 
+<form #form="ngForm" autocomplete="off" *ngIf="service.formData"  (submit)="onSubmit(form)">
+  <input type="hidden" name="fact_id" #fact_id= "ngModel" [(ngModel)]="service.formData.fact_id" />
+ <!--<input type="hidden" name="ref_contrat" #ref_contrat= "ngModel" [(ngModel)]="service.formData.client">--> 
+   
+  <div class="row">
+    <div class="col-md-6" >
+     
+
+      <div class="form-group">
+        <label >Reférence Contrat
+        </label>
+        <select name="contrat_id" #contrat_id="ngModel" [disabled]= "state()"  [(ngModel)]="service.formData.contrat_id" class="form-control" (click)="changeClient($event.target)">
+         <option value="0">-select-</option> 
+         <option *ngFor="let c of contratService.list" value="{{c.contrat_id}}">{{c.ref_contrat}} </option>
+        </select>
+      </div>
+  
+<!--   <div class="form-group">
+        <label>Customer</label>
+        <select name="CustomerID" #CustomerID="ngModel" [(ngModel)]="service.formData.CustomerID" class="form-control"
+        [class.is-invalid]="!isValid && service.formData.CustomerID==0">
+          <option value="0">-Select-</option>
+          <option *ngFor="let item of customerList" value="{{item.CustomerID}}">{{item.Name}}</option>
+        </select>
+      </div>"-->
+      <div class="form-group">
+        <label >Client
+        </label>
+           <input name="client" #client="ngModel" [(ngModel)]="service.formData.client" class="form-control" readonly>
+          
+      </div>
+      <!---->
+      <div class="row">
+        <div class="col-md-8" >
+       <div class="form-group ">
+        <label >Prix Unitaire
+        </label>
+        <input  name="price" #price="ngModel" [(ngModel)]="service.formData.price" class="form-control"   readonly>
+        <!--  <input bsDatepicker name="date_envoie" #date_envoie="ngModel" [(ngModel)]="service.formData.date_envoie" class="form-control"   [bsValue]="d"  [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }" [isDisabled]="true" readonly>-->
+      </div></div>
+      <div class="col-md-4" >
+      <div class="form-group ">
+        <label > TVA
+        </label>
+        <div class="input-group">
+       
+        <input  name="tva" #tva="ngModel" [(ngModel)]="service.formData.tva" class="form-control"   readonly > <div class="input-group-prepend">
+          <div class="input-group-text">
+           %
+          </div>
+      
+          </div>
+        </div>
+      </div>
+    </div></div>
+   
+    
+    </div>
+
+    <div class="col-md-6">
+      
+      <div class="form-group">
+        <label >Description 
+        </label>
+        <div class="input-group">
+          <input name="label" #label="ngModel" [(ngModel)]="service.formData.label" class="form-control" readonly>
+
+        </div>
+        
+      </div>
+
+      <div class="form-group">
+        <label >Adresse 
+        </label>
+        <div class="input-group">
+            
+              <input name="local" #local="ngModel" [(ngModel)]="service.formData.local" class="form-control" readonly>
+              
+        </div>
+       
+      </div>
+     <div class="form-group">
+        <label >Grand totale
+        </label>
+        <div class="input-group">
+            
+              <input name="grand_total" #grand_total="ngModel" [(ngModel)]="service.formData.grand_total" class="form-control" readonly>
+              <div class="input-group-prepend">
+                <div class="input-group-text">
+                  €
+                </div>
+            
+                </div>
+        </div>
+       
+      </div>
+     
+    
+    </div>
+  </div>
+  <hr>
+  <!--Table de details de facture -->
+  <table class="table table-borderless" >
+    <thead class="thead-light">
+        <th>Date Envoie</th>
+      <th>Réf. Facture</th>
+      <th>Facture N°</th>
+      <th>Totale HT</th>
+      <th>Quantity</th>
+     
+      <th>Montant TVA</th>
+      <th>Totale TTC</th>
+      <th>
+        <a  class="btn btn-sm btn-success text-white" (click)="addOrEditFactDetail(null,service.formData.fact_id)"><i class="fa fa-plus"></i> Ajouter Facture</a>
+      </th>
+    </thead>
+    <tbody>
+      
+      <tr *ngFor="let c of service.factureDetails; let i=index">
+          <td>{{c.date_envoie | date : 'dd-MM-yyyy'}} </td>
+        <td>{{c.ref_fact}} </td>
+        <td>{{c.num_fact}} </td>
+        <td>{{c.total_ht}} </td>
+        <td>{{c.quantite}} </td>
+        <td>{{c.montant_tva}} </td>
+        <td>{{c.total_ttc}} </td>
+        <td><!--(click)="onDeleteFactDetail(i,service.formData.fact_id)"-->
+            <a  class="btn btn-sm btn-info" (click)="addOrEditFactDetail(i,service.formData.fact_id)"><i class="fa fa-pencil"></i></a>
+        <a  class="btn btn-sm btn-outline-warning ml-1 text-danger" (click)="transfer(i,service.formData.fact_id)" ><i class="fa fa-file-pdf-o"></i></a>
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+
+  <div class="form-group">
+    <button type="submit" class="btn btn-dark"><i class="fa fa-database"></i> Enregistrer</button>
+    <a  class="btn btn-outline-dark ml-1" routerLink="/factures" (click)="vider()"><i class="fa fa-table"></i> Afficher</a>
+  </div>
+</form><hr>
+
+    
+   
+
+       
+       
+    
+       
+<!--<div style="min-width: 600px">-->
+       
+<a name="fat"></a>
+    <div id="invoice" >
+
+        <div class="toolbar hidden-print">
+            <div class="text-right">
+                <!--<button id="printInvoice" class="btn btn-info"><i class="fa fa-print"></i> Print</button>-->
+                <button (click)="download()" class="btn btn-info"><i class="fa fa-file-pdf-o"></i> Export as PDF</button>
+            </div>
+            <hr>
+        <!---->
+        <div class="invoice overflow-auto">
+            <div id="results" #results >
+            <div class="container my-5 px-5 py-5">  
+              <!--cadre  -->
+              
+                <header>
+                    <div class="row">
+                        <div class="col">
+                            <a target="_blank" href="#">
+                                <img src="assets/img/angular7-logo.png" data-holder-rendered="true" />
+                                </a>
+                                <div>&nbsp;&nbsp;iMidlleware</div>
+                                <div>36 rue de la Bruyère 78300 Poissy</div>
+                                <div>Tél. : 06 27 57 47 41</div>
+                        </div>
+                        <div class="col invoice-details">
+                            <!--class="name" company-details-->
+                               
+                                    <h1 class="invoice-id"> FACTURE</h1>
+                                
+                           
+                           
+                        </div>
+                    </div>
+                </header>  
+                  <main>
+                    <div class="row contacts">
+                        <div class="col invoice-to">
+                            <div class="text-gray-light">Client : </div>
+                            <h2 class="to">{{service.formData.client}}</h2>
+                            <div class="address">{{service.formData.local}}</div>
+                            <div class="email"><a href="{{MAIL}}">{{MAIL}}</a></div>
+                        </div>
+                        <div class="col invoice-details">
+                            <h4 class="invoice-id">Facture N°{{NUM}} </h4>
+                            <div class="date">Date&nbsp;:&nbsp;{{DATE | date : 'dd-MM-yyyy'}}</div>
+                            <div class="date">Client&nbsp;:&nbsp;{{service.formData.client}}</div>
+                            <div class="date">Référence&nbsp;:&nbsp;{{REFF}} </div>
+                        </div>
+                    </div>  
+<!--ziada-->
+<div>Poissy, le {{DATE | date : 'dd-MM-yyyy'}}</div>
+  <div class="row table mt-5" id="fatoura" #fatoura>
+    <table class="invoice table table-hover">
+          <thead class="thead">
+            <tr>
+              
+              <th scope="col" class="text-center">DESCRIPTION</th>
+              <th></th>
+              <th scope="col">Quantité</th>
+              <th scope="col">Prix unitaire</th>
+             
+              <th scope="col">Prix total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+            
+              <td class="item">{{service.formData.label}}<br>Contrat de sous-traitance,&nbsp;REF&nbsp;&nbsp;:&nbsp;{{REF}} </td>
+              <td></td>
+              <td>{{QTE}}</td>
+             
+              <td>  {{service.formData.price}} <span class="currency">&euro;</span></td>
+              
+              <td>{{TOTAL}} <span class="currency">&euro;</span></td>
+            </tr>
+                     </tbody>
+        </table>
+ </div>
+
+<div class="row">
+ <!-- invoiced to details  -->
+ <div class=" offset-2 col-4">
+    <div class="to text-right">
+      <!--      <h5 class="effect-color pt-4">Invoiced to:</h5>
+          <h4 class="theme-color"><strong>Company Name</strong></h4>
+          <h6>Address of issuer</h6>
+          <p>Contact details Spanning on multiple rows cuz bootstrap is awesome.</p>
+       <h5>Due date: 02/02/20 20</h5>-->
+  
+        </div>
+ </div>
+ <!-- Invoice assets and total -->
+   <div class="col-6 pr-5">
+        <table class="table table-borderless text-right">
+          <tbody>
+            <tr>
+              <th scope="row">Base H.T</th>
+              <td>{{TOTAL}} <span class="currency">&euro;</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Taux</th>
+              <td>{{service.formData.tva}}<span class="currency">&euro;</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Montant T.V.A</th>
+              <td>{{MTVA}} <span class="currency">&euro;</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Acompte</th>
+              <td><span class="currency">&euro;</span> 0</td>
+            </tr>
+             <tr class="last-row">
+                <th scope="row"><h4>TOTAL T.T.C</h4></th>
+                <td><h4><span class="currency">&euro;</span>{{TTTC}}</h4></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+ </div>
+ <p>A votre aimable règlement dans notre compte :</p>
+ <div class="container-fluid invoice-letter mt-3">
+    <div class="row">
+       <div class="col-3 text-white pl-5 py-2 letter-title">
+          <h5>Virement Bancaire</h5>
+       </div>
+       <br>
+       <div class="col-9 text-white pr-5 py-2 letter-content">
+         <div>Banque : BNPPARIBAS POISSY (00185)</div> 
+         <div>RIB : 30004 00646 00010094456 96</div>
+         <div>IBAN : FR76 3000 4006 4600 0100 9445 696</div>
+         <div>BIC : BNPAFRPPMAR</div>
+       </div>
+    </div>
+ </div><!--ziada--> <br><br><div class="thanks">Thank you!</div>
+ <div class="notices">
+     <div>&nbsp;&nbsp;</div>
+     <div class="notice">Le délai de paiement est de 30 jours après la réception de la facture</div>
+ </div> 
+</main>
+ <em class="text-success"><strong>SOCIETE iMiddleware</strong> </em>
+ <footer>
+  <div class="text-center">  36 RUE DE LA BRUYERE 78300 POISSY - RCS 803 128 388 R.C.S Versailles – Siret 80312838800011 <br>- TVA FR 803128388 - Tél : 0627574741 - E-mail:&nbsp;<a  class="email" href="borheneddine.essid@gmail.com">borheneddine.essid@gmail.com </a>
+  </div>
+
+ </footer>
+
+   
+</div>
+</div>
+</div><!--☻-->
+</div>
+
+
+ <!--☺☻--> <!--☺☻-->
+
+
+</div>
+
+
+
+
+
+
+</div>

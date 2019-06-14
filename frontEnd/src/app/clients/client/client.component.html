@@ -1,0 +1,117 @@
+<div [@routerTransition]>
+  <app-page-header [heading]="'Gestion des Prestataires'" [icon]="'fa fa-fw fa-wrench'" ></app-page-header>
+<h1 class="display-5" *ngIf="service.formData.client_id == null">Ajouter Nouveau Prestataire </h1> 
+<h1 class="display-5" *ngIf="service.formData.client_id != null">Modifier le Prestataire &nbsp; *{{service.formData.client_nom}}* </h1><hr>
+<form #form="ngForm" autocomplete="off" *ngIf="service.formData" (submit)="onSubmit(form)">
+    <input type="hidden"  name="client_id" #client_id="ngModel" [(ngModel)]="service.formData.client_id">
+  <div class="row">
+    <div class="col-md-6" >
+      <div class="form-group">
+        <label [class.text-danger]="client_nom.invalid && client_nom.touched"[class.text-success]="client_nom.valid" >Nom Prestataire
+        </label>
+        <div class="input-group">
+           
+              <input required name="client_nom" #client_nom="ngModel" [(ngModel)]="service.formData.client_nom" class="form-control" [class.is-valid]="client_nom.valid " [class.is-invalid]="client_nom.invalid  && client_nom.touched">
+
+        </div>
+        <span class="text-danger" *ngIf="client_nom.invalid && client_nom.touched">Nom Prestataire est obligatoire</span>
+      </div>
+
+      <div class="form-group">
+        <label [class.text-danger]="client_adresse.invalid && client_adresse.touched"[class.text-success]="client_adresse.valid" >Adresse
+        </label>
+        
+        <input required name="client_adresse" #client_adresse="ngModel" [(ngModel)]="service.formData.client_adresse" class="form-control" [class.is-valid]="client_adresse.valid " [class.is-invalid]="client_adresse.invalid  && client_adresse.touched">
+          
+      <span class="text-danger" *ngIf="client_adresse.invalid && client_adresse.touched">Adresse est obligatoire</span>
+      </div>
+      
+    
+   
+    
+    </div>
+
+    <div class="col-md-6">
+        <div class="row">
+        <div class="form-group col-md-9">
+            
+            <label  [class.text-danger]="client_siret.invalid && client_siret.touched"[class.text-success]="client_siret.valid">Num. Siret
+            </label>
+            <input required pattern="^[0-9]{14}$" name="client_siret" #client_siret="ngModel" [(ngModel)]="service.formData.client_siret" class="form-control" [class.is-valid]="client_siret.valid " [class.is-invalid]="client_siret.invalid  && client_siret.touched" [disabled]= "state()">
+            <span class="text-danger" *ngIf="client_siret.errors?.required && client_siret.touched">Num. Siret est obligatoire</span>
+            <span class="text-danger" *ngIf="client_siret.errors?.pattern && client_siret.touched">Num. Siret doit composer de 14 chiffres</span>
+         </div> 
+          
+       
+         <div class="form-group col-md-3">
+         <label  [class.text-danger]="client_TVA.invalid && client_TVA.touched"[class.text-success]="client_TVA.valid">TVA
+        </label> 
+        <div class="input-group" >
+        <input required pattern="^[0-9]{2}$" name="client_TVA" #client_TVA="ngModel" [(ngModel)]="service.formData.client_TVA" class="form-control" [class.is-valid]="client_TVA.valid " [class.is-invalid]="client_TVA.invalid  && client_TVA.touched">
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+          %
+          </div>
+      </div>
+          </div>
+          <span class="text-danger" *ngIf="client_TVA.errors?.required && client_TVA.touched">TVA est obligatoire</span>
+          <span class="text-danger" *ngIf="client_TVA.errors?.pattern && client_TVA.touched">TVA doit composer de 2 chiffres</span>
+          
+     </div>
+    </div>
+      <div class="form-group ">
+        <label [class.text-danger]="client_email.invalid && client_email.touched"[class.text-success]="client_email.valid" >Email
+        </label>
+        <input required [email]="service.formData.client_email!==''"  name="client_email" #client_email="ngModel" [(ngModel)]="service.formData.client_email" class="form-control" [class.is-valid]="client_email.valid " [class.is-invalid]="client_email.invalid  && client_email.touched">
+        <span class="text-danger" *ngIf="client_email.errors?.required && client_email.touched">Email est obligatoire</span>
+      <span class="text-danger" *ngIf="client_email.errors?.email && client_email.touched">Email n'est pas valide</span>
+      </div>
+     
+    
+    </div>
+    
+  </div>
+  
+
+  <!--Table de details de facture -->
+  <table class="table table-borderless" >
+    <thead class="thead-light">
+      <th>client-médiateur</th>
+      <th> id-client-final </th>
+      <th>client-final</th>
+      <th>Autre adresse</th>
+      <th>
+        <a   class="btn btn-sm btn-success text-white" (click)="AddOrEditClientFinal(null,service.formData.client_id)"><i class="fa fa-plus"></i> Ajouter client final</a>
+      </th>
+    </thead>
+    <tbody>
+ 
+         <!--<tr >
+        <td class="font-italic text-center ml-1" colspan="6">
+         N'est pas un client médiateur.
+        </td>
+      </tr>--> 
+
+      <tr *ngFor="let c of service.clientDetails; let i=index">
+        <td>{{c.client_mediator}} </td>
+        <td>{{c.final_client_id}} </td>
+        <td>{{c.final_client_nom}} </td>
+       <td>{{c.client_adresse}}</td>
+        <td>
+            <a  class="btn btn-sm btn-info" (click)="AddOrEditClientFinal(i,service.formData.client_id)"><i class="fa fa-pencil"></i></a>
+            <a  class="btn btn-sm btn-danger ml-1" (click)="onDeleteDetailClient(c.client_detail_id,i)"><i class="fa fa-trash"></i></a>
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+<hr>
+  <div class="form-group">
+    <button type="submit" class="btn btn-dark" [disabled]="form.invalid"><i class="fa fa-database"></i> Enregistrer</button>
+    <a  class="btn btn-outline-dark ml-1" routerLink="/clients"><i class="fa fa-table"></i> Afficher</a>
+  </div>
+ <div class="text-danger" *ngIf="!isValid && service.formData.client_id== null ">
+   <h4 center >Numéroi de siret existe déja!!</h4>
+ </div>
+</form>
+</div>

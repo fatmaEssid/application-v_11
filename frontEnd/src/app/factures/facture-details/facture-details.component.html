@@ -1,0 +1,82 @@
+<h4 class="display-4">Détails de la facture</h4>
+<hr>
+<form #form="ngForm" (submit)="onSubmit(form)" autocomplete="off">
+    <input type="hidden" name="fact_detail_id" #fact_detail_id="ngModel" [(ngModel)]="formData.fact_detail_id">
+    <input type="hidden" name="fact_id" #fact_id="ngModel" [(ngModel)]="formData.fact_id">
+
+
+  <div class="form-row">
+  <div class="form-group col-md-4">
+
+      <div class="form-group">
+          <label >Numéro Facture</label>
+          <input name="num_fact" #num_fact="ngModel" [(ngModel)]="formData.num_fact" class="form-control"  [class.is-invalid]="!isValid && formData.Contrat_id==0" readonly>
+              
+        </div>
+        <div class="form-group">
+        <label >Quantité
+          </label>
+                <input name="quantite" #quantite="ngModel" [(ngModel)]="formData.quantite" class="form-control" (keyup)="updateTotal()" > 
+     </div>
+    </div>
+    <div class="form-group col-md-4">
+      
+        <div class="form-group">
+            <label >Réfernce Facture</label>
+            <input name="ref_fact" #ref_fact="ngModel" [(ngModel)]="formData.ref_fact" class="form-control"  [class.is-invalid]="!isValid && formData.Contrat_id==0" readonly>
+                
+          </div>
+          <div class="form-group">
+              <label >Total HT
+              </label>
+                    <input name="total_ht" #total_ht="ngModel" [(ngModel)]="formData.total_ht" class="form-control" readonly>  
+                   
+            </div>
+       
+
+            
+      
+      </div>
+      <div class="form-group col-md-4">
+      
+          <div class="form-group">
+              <label >Date Envoie</label>
+              <input bsDatepicker name="date_envoie" #date_envoie="ngModel" [(ngModel)]="formData.date_envoie" class="form-control datepicker" [minDate]="mindate" [maxDate]="maxDate" [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }"  >
+                  
+            </div>
+            <!--☺-->
+            <div class="form-group">
+                <label >Montant TVA
+                </label>
+                <div class="input-group">
+                    
+                      <input name="montant_tva" #montant_tva="ngModel" [(ngModel)]="formData.montant_tva" class="form-control" readonly>
+                      
+                </div></div>
+         </div>
+    </div>
+
+
+      <div class="form-group col-md-12">
+    <div class="form-group">
+        <label >Total TTC
+        </label>
+        <div class="input-group">
+            
+              <input name="total_ttc" #total_ttc="ngModel" [(ngModel)]="formData.total_ttc" class="form-control" readonly>
+              <div class="input-group-prepend">
+                  <div class="input-group-text">
+                    €
+                  </div>
+              
+                  </div>
+        </div>
+       
+      </div>
+    </div>
+    
+      <div class="form-group">
+          <button type="submit" class="btn btn-dark"><i class="fa fa-database"></i> Enregistrer</button>
+          <button type="button" class="btn btn-outline-dark ml-1" [mat-dialog-close] ><i class="fa fa-close"></i> Fermer</button>
+      </div>
+</form>

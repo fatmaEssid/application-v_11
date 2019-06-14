@@ -1,0 +1,21 @@
+<div [@routerTransition]>
+  <app-page-header [heading]="'Gestion des Contrats'" [icon]="'fa fa-file'"></app-page-header>
+  <div >
+      <div *ngIf="clientList.length == 0">
+          <table><tr>
+            <td> <h1 class="display-5 text-danger"> Ajouter au moins un prestataire</h1></td>
+            <td></td>
+            <td> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a  class="btn btn-outline-success ml-1" routerLink="/clients"><i class="fa fa-fw fa-plus-square"></i> Ajouter Prestataire</a> </td>
+          </tr></table>
+           
+            </div>
+            
+            <div *ngIf="clientList.length != 0">
+      <app-contrat></app-contrat>
+   
+    <hr>
+    <div >
+      <app-contrats></app-contrats>
+    </div>
+  </div>
+</div>

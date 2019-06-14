@@ -1,0 +1,99 @@
+<div [@routerTransition]>
+    <app-page-header [heading]="'Liste des Factures'" [icon]="'fa fa-table'"></app-page-header>
+    
+    <div *ngIf="contratService.list.length == 0">
+      <table><tr>
+        <td> <h1 class="display-5 text-danger"> Ajouter au moins un contrat</h1></td>
+        <td></td>
+        <td> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a  class="btn btn-outline-success ml-1" routerLink="/contrats"><i class="fa fa-fw fa-plus-square"></i> Ajouter Contrat</a> </td>
+      </tr></table>
+       
+        </div>
+        
+        <div *ngIf="contratService.list.length != 0">
+            <h1 class="display-5">Listes des Factures</h1>
+            <hr>
+
+
+            
+            <!--▓½→ <div id="accordion">
+              <div class="card">
+                <div class="card-header" id="headingOne">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      Collapsible Group Item #1
+                    </button>
+                  </h5>
+                </div>
+            
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                  <div class="card-body">
+                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" id="headingTwo">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                      Collapsible Group Item #2
+                    </button>
+                  </h5>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                  <div class="card-body">
+                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" id="headingThree">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                      Collapsible Group Item #3
+                    </button>
+                  </h5>
+                </div>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                  <div class="card-body">
+                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                  </div>
+                </div>
+              </div>--><form #form="ngForm" autocomplete="off"  >
+              <div class="container" >
+                <input class="searchbar" type="text"  placeholder="Search..."  name="id" #id="ngModel" [(ngModel)]="serviceSearch.formData.id" >
+                <button (click)="onSubmit(serviceSearch.formData.id)" class="btn btn-outline-danger" ><i class="fa fa-search"></i></button>
+              </div> <br>
+              <p class="text-center text-danger">{{long}}</p>
+            </form>
+             
+            
+
+            
+<table class="table table-hover">
+  <thead class="thead-light">
+    <th>Facture ID</th>
+    <th>Client</th>
+    <th>Adresse</th>
+    <th>Email</th>
+    <th>Ref_contrat</th>
+    <th>Description</th>
+    <th>global montant</th>
+    <th>
+      <a  class="btn btn-outline-success" routerLink="/facture"><i class="fa fa-plus-square"></i> Ajouter</a>
+    </th>
+  </thead>
+  <tbody>
+    <tr *ngFor="let i of factureList">
+      <th (click)="openOrEdit(i.fact_id)">{{i.fact_id}} </th>
+      <td (click)="openOrEdit(i.fact_id)">{{i.client}} </td>
+      <td (click)="openOrEdit(i.fact_id)">{{i.local}} </td>
+      <td (click)="openOrEdit(i.fact_id)">{{i.mail}} </td>
+      <td (click)="openOrEdit(i.fact_id)">{{i.ref_contr}} </td>
+      <td (click)="openOrEdit(i.fact_id)">{{i.label}} </td>
+      <td (click)="openOrEdit(i.fact_id)">{{i.grand_total}}€ </td>
+      
+      
+    </tr>
+  </tbody>
+</table></div></div>
