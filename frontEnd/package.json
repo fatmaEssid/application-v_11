@@ -36,7 +36,7 @@
     "html2canvas": "^1.0.0-rc.3",
     "html2pdf.js": "^0.9.1",
     "jspdf": "^1.5.3",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "ng2-charts": "^2.2.3",
     "ngx-bootstrap": "^4.0.1",
     "ngx-toastr": "^9.1.2",
